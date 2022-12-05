@@ -1,2 +1,2 @@
 #!/bin/bash
-ehco "Best School" > "\*\\'\"Best School\"\'\\*$\?\*\*\*\*\*:)"
+ehco "Best School" > "\*\\\'\"Best School\"\'\\\*$\?\*\*\*\*\*:)"
