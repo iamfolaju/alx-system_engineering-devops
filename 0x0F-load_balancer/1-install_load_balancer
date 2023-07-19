@@ -1,23 +1,34 @@
+<<<<<<< HEAD
+=======
 #!/usr/bin/env bash
-# Installs and setup haproxy
+# Create a script to install and configure HAProxy on lb-01 server
+# Configure HAProxy to send traffic to web-01 and web-02 servers
+# Distribute requests using a roundrobin algorithm
+# Make sure that HAProxy can be managed via an init script
 
-apt-get install -y software-properties-common
-add-apt-repository -y ppa:vbernat/haproxy-1.8
-apt-get -y update
-apt-get install -y haproxy=1.8.\*
+# Install and configure HAproxy on my lb-01 server.
+sudo apt-get -y update
+apt-get -y install haproxy
 
-echo "ENABLED=1" > /etc/default/haproxy
+# edit config file
+server_config=\
+"
+frontend  iamfolaju_frontend
+        bind *:80
+        mode http
+        default_backend iamfolaju_backend
+backend iamfolaju_backend
+        balance roundrobin
+        server 218706-web-01 35.153.83.11:80 check
+        server 218706-web-02 54.210.22.177:80 check
+"
+echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
-# Listen to web1 and web2 servers                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-echo "
-   listen load_balancer
-   bind *:80
-   mode http
-   balance roundrobin
-   option httpclose
-   option forwardfor
-   server 218706-web-01 35.153.83.11  check
-   server 218706-web-02 54.210.22.177 check
-" >> /etc/haproxy/haproxy.cfg
+# enable haproxy to be started by init script
+echo "ENABLED=1" | sudo tee -a /etc/default/haproxy
 
-service haproxy start
+# Testing the HAproxy configuration file
+sudo haproxy -c -f /etc/haproxy/haproxy.cfg
+
+# Restart the Nginx service
+sudo service haproxy restart
