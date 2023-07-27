@@ -19,8 +19,8 @@ frontend  iamfolaju_frontend
         default_backend iamfolaju_backend
 backend iamfolaju_backend
         balance roundrobin
-        server 218706-web-01 35.153.83.11:80 check
-        server 218706-web-02 54.210.22.177:80 check
+        server 218706-web-01 100.25.199.43:80 check
+        server 218706-web-02 54.160.97.52:80 check
 "
 echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
